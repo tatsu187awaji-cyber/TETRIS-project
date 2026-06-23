@@ -1,0 +1,361 @@
+/* ==========================================
+   スタート画面（ホーム画面）のスタイル
+   ========================================== */
+.start-screen {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #111;
+  /* ゲーム画面と同じダーク背景 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  /* 一番手前に持ってくる */
+  transition: opacity 0.5s ease;
+  /* 消えるときにスッとフェードアウトさせる */
+}
+
+/* 💡 ゲーム開始時にこのクラスをJSでつけると画面が消える */
+.start-screen.hidden {
+  opacity: 0;
+  pointer-events: none;
+  /* クリックなどを無効化して後ろのゲームを触れるようにする */
+}
+
+.start-content {
+  text-align: center;
+}
+
+.start-title {
+  font-family: 'Doto', sans-serif;
+  font-size: 4.5rem;
+  color: #00eeff;
+  /* テトリスブルー */
+  text-shadow: 0 0 15px rgba(0, 238, 255, 0.6);
+  margin-bottom: 0.5rem;
+  letter-spacing: 2px;
+  letter-spacing: 0.05em;
+}
+
+.start-subtitle {
+  font-family: 'DotGothic16', sans-serif;
+  font-size: 1.2rem;
+  color: #ffaa00;
+  margin-bottom: 3rem;
+  letter-spacing: 0.1em;
+}
+
+.start-button {
+  font-family: 'DotGothic16', sans-serif;
+  font-size: 1.5rem;
+  padding: 12px 35px;
+  background-color: #ff4400;
+  color: #fff;
+  border: 0 solid #fff;
+  border-radius: 0;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  box-shadow: 0 0 15px rgba(255, 68, 0, 0.4);
+  transition: transform 0.1s, background-color 0.2s;
+}
+
+.start-button:hover {
+  background-color: #ff6622;
+  transform: scale(1.05);
+  /* マウスを乗せたら少し大きく */
+}
+
+.start-button:active {
+  transform: scale(0.95);
+  /* クリックした瞬間に少し凹む */
+}
+
+body {
+  /* Flexboxでコンテンツを中央寄せ */
+  display: flex;
+  flex-direction: column;
+  /* 縦方向に要素を並べる */
+  align-items: center;
+  /* 水平方向の中央揃え */
+  justify-content: center;
+  /* 垂直方向の中央揃え (必要に応じて) */
+  min-height: 100vh;
+  /* 画面全体の高さを占める */
+  margin: 0;
+  /* bodyのデフォルトマージンをリセット */
+  background-color: #333;
+  /* 背景色を追加して見やすくする */
+  font-family: 'Doto', "DotGothic16", sans-serif;
+  /* ドット絵風フォントを適用 */
+  font-weight: 600;
+}
+
+.header h1 {
+  text-align: center;
+  color: white;
+  font-family: 'Doto', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+
+/* 個別の要素にも適用 */
+.score-display,
+.label,
+.pauseButton {
+  font-family: 'Doto', sans-serif;
+}
+
+.main-container {
+  display: flex;
+  /* Flexboxを有効にする */
+  justify-content: center;
+  /* 子要素を水平方向に中央揃え */
+  align-items: flex-start;
+  /* 子要素を垂直方向に上揃え */
+  gap: 40px;
+  /* 子要素間の間隔を設定 */
+}
+
+
+.left-block,
+.center-block,
+.right-block {
+  /* 各ブロックのスタイル（必要に応じて調整） */
+  padding: 10px;
+  /* background-color: #555; /* 各ブロックの確認用 */
+  /* color: white; */
+}
+
+.left-block {
+  margin-top: 20%;
+}
+
+.right-block {
+  margin-top: 5%;
+}
+
+
+canvas {
+  background: #111;
+  display: block;
+  margin: 1rem auto;
+  /* 上下のマージンを1rem、左右をautoで中央揃え */
+  border: 2px solid #fff;
+  border: 1px solid black;
+}
+
+.hold {
+  position: static;
+  left: 50%;
+  top: 153px;
+  margin: 0;
+}
+
+.next {
+  left: 50%;
+  /* holdの逆方向 */
+  top: 153px;
+  margin: 0;
+}
+
+.tetris {
+  /* テトリス本体のmargin-leftを削除し、canvasのmargin: autoに任せる */
+  margin: 1rem auto;
+  /* これで中央に配置されます */
+}
+
+.game-display {
+  display: flex;
+  justify-content: center;
+  /* 水平方向の中央揃え */
+  align-items: center;
+  /* 垂直方向の中央揃え */
+  margin-bottom: 1rem;
+}
+/* スコア表示のスタイル */
+.score-display {
+  text-align: center;
+  color: white;
+  /* 背景色に合わせて文字色を白に */
+  font-family: 'Doto', sans-serif;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.label {
+  position: absolute;
+  color: white;
+  font-family: 'Doto', sans-serif;
+  font-size: 1rem;
+  text-align: center;
+  width: 120px;
+}
+
+.hold-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+  /* 必要に応じて */
+}
+
+
+.hold-label {
+
+  margin-bottom: 8px;
+  /* 必要に応じて微調整 */
+}
+
+.label-level {
+  color: white;
+  font-weight: 600;
+  font-family: "Doto", sans-serif;
+}
+
+.label-level span {
+  margin-left: 5px;
+  font-size: 24px;
+}
+
+.next-label {
+  /* 必要に応じて微調整 */
+}
+
+.game-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  width: 280px;
+}
+
+.pauseButton {
+  /* 既存のスタイル... */
+  color: white;
+  background-color: transparent;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: 'Doto', sans-serif;
+  margin-top: 20px;
+
+  /* ✅ ここからピクセル風ボーダーの追加 */
+  border: none;
+  /* デフォルトのボーダーを非表示にする */
+  box-shadow:
+    inset -2px -2px #ffffff,
+    /* 左下から光が当たったような内側の影 */
+    inset 2px 2px #5a5a5a,
+    /* 右上から影ができたような内側の影 */
+    -2px -2px #000000,
+    /* 左上に描画する外側の影 */
+    2px 2px #000000,
+    /* 右下に描画する外側の影 */
+    -2px 2px #000000,
+    /* 左下に描画する外側の影 */
+    2px -2px #000000;
+  /* 右上に描画する外側の影 */
+
+  transition: all 0.1s ease-in-out;
+  /* ホバー時の滑らかなアニメーション */
+}
+
+/* ボタンが押されたときのスタイルを追加 */
+.pauseButton:active {
+  box-shadow: none;
+  /* 影をなくしてボタンが凹んでいるように見せる */
+  transform: translateY(2px) translateX(2px);
+  /* わずかにずらして押し込まれた感を出す */
+}
+
+/* ホバー時のスタイル（オプション） */
+.pauseButton:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.hold-buttons {
+  width: 56px;
+  display: flex;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+/* 左右の移動ボタンを中央に配置するコンテナ */
+.move-buttons {
+  bottom: 10px;
+  display: flex;
+  margin-left: 10px;
+  margin-top: 10px;
+  gap: 20px;
+  /* ボタン間のスペース */
+}
+
+.rotate-buttons {
+  bottom: 10px;
+  display: flex;
+  width: 40px;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.down-buttons {
+  bottom: 10px;
+  display: flex;
+  width: 40px;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+/* 個々の移動ボタンのスタイル */
+.move-button {
+  font-size: 16px;
+  padding: 10px 10px;
+  background-color: transparent;
+  border: none;
+  /* デフォルトのボーダーを非表示にする */
+  box-shadow:
+    inset -2px -2px #ffffff,
+    /* 左下から光が当たったような内側の影 */
+    inset 2px 2px #5a5a5a,
+    /* 右上から影ができたような内側の影 */
+    -2px -2px #000000,
+    /* 左上に描画する外側の影 */
+    2px 2px #000000,
+    /* 右下に描画する外側の影 */
+    -2px 2px #000000,
+    /* 左下に描画する外側の影 */
+    2px -2px #000000;
+  /* 右上に描画する外側の影 */
+
+  transition: all 0.1s ease-in-out;
+  /* ✅ ホバー時の滑らかなアニメーション */
+  color: white;
+  cursor: pointer;
+  font-family: "DotGothic16", sans-serif;
+}
+
+/* ボタンが押されたときのスタイル（オプション） */
+.move-button:active {
+  box-shadow: none;
+  /* 影をなくしてボタンが凹んでいるように見せる */
+  transform: translateY(2px) translateX(2px);
+  /* わずかにずらして押し込まれた感を出す */
+}
+
+/* ホバー時のスタイル（オプション） */
+.move-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.hold-buttons .move-button {
+  font-family: Doto, sans-serif;
+}
+
+#rotateButton,
+#downButton {
+  margin: 0 auto;
+}
