@@ -1,2 +1,132 @@
-# TETRIS-project
-javascriptを用いた、TETRIS完全再現を目標とした個人制作です
+# 🎮 TETRIS
+
+JavaScriptとCanvas APIで実装したTETRIS完全再現を目標としたテトリスゲームです。
+
+![JavaScript](https://img.shields.io/badge/JavaScript-ES2020-yellow)
+![HTML5](https://img.shields.io/badge/HTML5-Canvas-orange)
+![CSS3](https://img.shields.io/badge/CSS3-3.0-blue)
+
+---
+
+## 📌 概要
+
+バニラJavaScript（フレームワークなし）とCanvas APIのみを使って実装したテトリスです。
+モジュール分割による設計、本家テトリスに近いゲームルールの再現にこだわりました。
+
+---
+
+## 🕹️ 操作方法
+
+### キーボード
+| キー | 操作 |
+|------|------|
+| ← → | 左右移動 |
+| ↓ | ソフトドロップ |
+| ↑ | 回転（時計回り） |
+| W | 回転（反時計回り） |
+| スペース | ハードドロップ |
+| C | ホールド |
+| P | ポーズ |
+
+### マウス
+| 操作 | 動作 |
+|------|------|
+| 移動 | ミノをマウスの位置に追従 |
+| 左クリック | 回転 |
+
+---
+
+## ✨ 主な機能
+
+- **ゴースト表示** - ミノの着地予測位置をリアルタイム表示
+- **ホールド** - 現在のミノを保持して後で使用
+- **ネクスト3つ表示** - 次のミノを3つ先まで表示
+- **Tスピン判定** - フルTスピン・ミニTスピンの判定に対応
+- **B2Bシステム** - テトリスやTスピンの連続達成でボーナス加算、段階的なオーラエフェクト
+- **RENボーナス** - 連続ライン消去でコンボボーナス
+- **パーフェクトクリア判定** - 盤面を全消しした際の特別ボーナス
+- **パーティクルエフェクト** - ライン消去時の演出
+- **シェイクエフェクト** - 消去ライン数に応じた画面振動
+- **レベルアップ** - 10ライン消去ごとにレベルアップ、落下速度が上昇
+
+---
+
+## 🚀 起動方法
+
+### 必要なもの
+- [Visual Studio Code](https://code.visualstudio.com/)
+- VS Code拡張機能：[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
+
+### 手順
+1. リポジトリをクローン
+```bash
+git clone git@github.com:tatsu187awaji-cyber/TETRIS-project.git
+cd TETRIS-project
+```
+
+2. VS CodeでフォルダをOpen
+
+3. `index.html` を右クリック →「Open with Live Server」
+
+4. ブラウザで `http://127.0.0.1:5500` が開けばOK
+
+---
+
+## 🛠️ 技術スタック
+
+| 技術 | 用途 |
+|------|------|
+| HTML5 Canvas | ゲーム画面の描画 |
+| Vanilla JavaScript (ES Modules) | ゲームロジック全般 |
+| CSS3 | UI・アニメーション |
+
+---
+
+## 📁 ディレクトリ構成
+
+```
+TETRIS-project/
+├── index.html
+├── index.css
+├── main.js               # エントリーポイント・メインループ
+└── src/
+    ├── core/
+    │   ├── constants.js  # 定数・ミノ定義
+    │   ├── logic.js      # 衝突判定・Tスピン判定
+    │   ├── engine.js     # ゴースト計算・ライン消去・レベルアップ
+    │   └── kickTables.js # SRSキックテーブル
+    ├── entities/
+    │   └── player.js     # プレイヤー操作・スポーン
+    ├── systems/
+    │   ├── actions.js    # ドロップ・ホールド・スコア計算
+    │   └── controller.js # キーボード・マウス入力
+    ├── view/
+    │   ├── render.js     # 描画処理
+    │   └── ui.js         # UI更新
+    └── effects/
+        ├── b2bEffect.js      # B2Bオーラエフェクト
+        ├── flashEffect.js    # フラッシュエフェクト
+        └── shakeEffect.js    # シェイクエフェクト
+```
+
+---
+
+## 💡 実装のこだわり
+
+### ゴースト表示
+ミノが着地する位置をリアルタイムで計算し、半透明で表示。衝突判定ロジックを流用して実装しています。
+
+### Tスピン判定
+Tミノの4隅のブロック占有状況をチェックするコーナールールで、フルTスピンとミニTスピンを判定しています。
+
+### B2Bシステム
+テトリスまたはTスピンを連続して達成するとB2Bが継続し、ボーナス加算に加えて段階ごとに色が変わるオーラパーティクルが発生します（白→青→緑→赤→黄→紫→虹色）。
+
+### パーティクルエフェクト
+消去ライン数・Tスピン・B2B継続・レベルアップそれぞれで異なる色・量・速度のパーティクルを生成。ゲームの爽快感を高めるために力を入れた部分です。
+
+---
+
+## 📝 ライセンス
+
+[MIT License](LICENSE)
