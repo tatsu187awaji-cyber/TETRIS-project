@@ -1,190 +1,140 @@
-import { ROWS, COLUMNS, colors, INITIAL_DROP_INTERVAL, createPiece } from './src/core/constants.js';
-import { createMatrix, collide } from './src/core/logic.js';
-import { renderScene } from './src/view/render.js';
-import { player, playerMove, playerReset, playerRotate, playerMoveToMouse } from './src/entities/player.js';
-import { getGhostPosition } from './src/core/engine.js';
-import { initCanvas, updateScoreElement, updatePauseButton } from './src/view/ui.js';
-import { setupControls } from './src/systems/controller.js';
-import { handlePlayerDrop, handleHardDrop, handleHold } from './src/systems/actions.js';
-import { spawnB2BAura } from './src/effects/b2bEffect.js';
+import {
+  ROWS,
+  COLUMNS,
+  colors,
+  INITIAL_DROP_INTERVAL,
+  createPiece,
+} from "./src/core/constants.js";
+import { createMatrix, collide } from "./src/core/logic.js";
+import { renderScene } from "./src/view/render.js";
+import {
+  player,
+  playerMove,
+  playerReset,
+  playerRotate,
+  playerMoveToMouse,
+} from "./src/entities/player.js";
+import { getGhostPosition } from "./src/core/engine.js";
+import {
+  initCanvas,
+  updateScoreElement,
+  updatePauseButton,
+} from "./src/view/ui.js";
+import { setupControls } from "./src/systems/controller.js";
+import {
+  handlePlayerDrop,
+  handleHardDrop,
+  handleHold,
+} from "./src/systems/actions.js";
+import { spawnB2BAura } from "./src/effects/b2bEffect.js";
 
 // --- 1. 初期化 (Contexts) ---
-const { canvas, context } = initCanvas('game');
-const { canvas: holdCanvas, context: holdCtx } = initCanvas('hold');
+const { canvas, context } = initCanvas("game");
+const { canvas: holdCanvas, context: holdCtx } = initCanvas("hold");
 // NEXT用のCanvasを3つ取得
 const nextCanvases = [
-    initCanvas('next-1'),
-    initCanvas('next-2'),
-    initCanvas('next-3')
+  initCanvas("next-1"),
+  initCanvas("next-2"),
+  initCanvas("next-3"),
 ];
 
 // Contextsをまとめておく（nextCtxsとして配列で持つ）
 const ctxs = {
-    context,
-    holdCtx,
-    nextCtxs: nextCanvases.map(c => c.context)
+  context,
+  holdCtx,
+  nextCtxs: nextCanvases.map((c) => c.context),
 };
 
 // --- 2. ゲームの状態管理 ---
 const gameState = {
-    score: 0, level: 1, lineCount: 0,
-    dropInterval: INITIAL_DROP_INTERVAL,
-    nextPieces: [],
-    holdType: null, canHold: true,
-    mouseCol: 5,
-    particles: [],
-    flashMessage: null,
-    combo: 0,
-    b2b: false,
-    b2bCount: 0,
+  score: 0,
+  level: 1,
+  lineCount: 0,
+  dropInterval: INITIAL_DROP_INTERVAL,
+  nextPieces: [],
+  holdType: null,
+  canHold: true,
+  mouseCol: 5,
+  particles: [],
+  flashMessage: null,
+  combo: 0,
+  b2b: false,
+  b2bCount: 0,
 };
 
 const arena = createMatrix(COLUMNS, ROWS);
 const pieceBag = [];
-let isPaused = true;       // 最初はポーズ（待機）状態にしておく
-let gameStarted = false;   // スタートボタンが押されたかどうかのフラグ
+let isPaused = true; // 最初はポーズ（待機）状態にしておく
+let gameStarted = false; // スタートボタンが押されたかどうかのフラグ
 let lastTime = 0;
 let dropCounter = 0;
 let animationId = null;
 
 // ヘルパー
 const updateScore = () => updateScoreElement(gameState);
-const resetLock = () => { };
+const resetLock = () => {};
 
-// --- 3. コントローラー設定 ---
+// --- 3. ゲームオーバー表示 ---
+function showGameOver() {
+  isPaused = true;
+  gameStarted = false;
+  context.fillStyle = "rgba(0, 0, 0, 0.7)";
+  context.fillRect(0, 0, canvas.width, canvas.height);
+  context.fillStyle = "#fff";
+  context.font = `bold ${2}px 'Doto', sans-serif`;
+  context.textAlign = "center";
+  context.fillText("GAME OVER", COLUMNS / 2, ROWS / 2);
+}
+
+// --- 4. コントローラー設定 ---
 setupControls({
-    onMove: (dir) => !isPaused && playerMove(arena, dir, resetLock),
-    onRotate: () => !isPaused && playerRotate(arena, resetLock),
-    onRotateCCW: () => playerRotate(arena, resetLock, -1),
-    onDrop: () => {
-        if (!isPaused) {
-            // 第5引数に true を渡して「手動落下」であることを伝える
-            handlePlayerDrop(arena, gameState, pieceBag, updateScore, true);
-        }
-    },
-    onHardDrop: () => !isPaused && handleHardDrop(arena, gameState, pieceBag, updateScore),
-    onHold: () => !isPaused && handleHold(arena, gameState, pieceBag),
-    onPause: () => {
-        if (!gameStarted) return;
-        isPaused = !isPaused;
-        updatePauseButton(isPaused, document.getElementById('pauseButton'));
-
-        if (!isPaused) {
-            startLoop();
-        }
-    },
-    onTitle: () => {
-        isPaused = true;
-        gameStarted = false; // ← ゲーム未開始状態に戻す
-        updatePauseButton(isPaused, document.getElementById('pauseButton'));
-
-        const startScreen = document.getElementById('startScreen');
-        startScreen.classList.remove('hidden'); // ← style.display ではなくクラスを外す
-    },
-    onReset: () => {
-        // 盤面と gameState をリセット
-        arena.forEach(row => row.fill(0));
-        gameState.score = 0;
-        gameState.level = 1;
-        gameState.lineCount = 0;
-        gameState.dropInterval = INITIAL_DROP_INTERVAL;
-        gameState.nextPieces = [];
-        gameState.holdType = null;
-        gameState.canHold = true;
-        gameState.particles = [];
-        gameState.flashMessage = null;
-        gameState.combo = 0;
-        gameState.b2b = false;
-        gameState.b2bCount = 0;
-        gameState.shake = null;
-        gameState.flashEffect = null;
-        pieceBag.length = 0; // バッグも空に
-        playerReset(arena, pieceBag, gameState);
-        updateScore();
-
-        // ポーズ中だった場合はゲームを再開
-        if (isPaused) {
-            isPaused = false;
-            updatePauseButton(false, document.getElementById('pauseButton'));
-            lastTime = performance.now();
-            startLoop();
-        }
-    },
-    onMouseMove: (dir) => !isPaused && playerMoveToMouse(arena, gameState, resetLock, true),
-    onMoveContinuous: (val) => {
-        // 長押し移動時のスコア加算も、定数化したいならSCORES.SOFT_DROP等を使う
-        gameState.score += val;
-        updateScore();
-    },
-    gameState: gameState
-
-});
-
-// --- 4. 描画の実行 (司令塔の仕事) ---
-function draw() {
-    // 描画に必要なデータをひとまとめにする
-    const renderData = {
+  onMove: (dir) => !isPaused && playerMove(arena, dir, resetLock),
+  onRotate: () => !isPaused && playerRotate(arena, resetLock),
+  onRotateCCW: () => playerRotate(arena, resetLock, -1),
+  onDrop: () => {
+    if (!isPaused) {
+      const isGameOver = handlePlayerDrop(
         arena,
-        player,
-        ghostPos: getGhostPosition(arena, player, collide),
         gameState,
-        colors,
-        ROWS,
-        COLUMNS,
-        createPiece, // render.js側でミノの形状を作る場合
-        holdCanvas,
-        nextCanvases: nextCanvases.map(c => c.canvas)
-    };
-
-    // 実際の描画は render.js のプロに任せる
-    renderScene(ctxs, renderData);
-}
-
-// --- 5. メインループ ---
-
-function startLoop() {
-    if (animationId) cancelAnimationFrame(animationId);  // 既存ループをキャンセル
-    lastTime = performance.now();
-    animationId = requestAnimationFrame(update);
-}
-
-function update(time = 0) {
-    if (isPaused) return;
-    console.log('update呼び出し数確認');
-    const delta = time - lastTime;
-    lastTime = time;
-    dropCounter += delta;
-
-    if (dropCounter > gameState.dropInterval) {
-        const isGameOver = handlePlayerDrop(arena, gameState, pieceBag, updateScore);
-        dropCounter = 0;
-        if (isGameOver) {
-            isPaused = true;
-            // ゲームオーバー画面を表示する処理をここに追加
-            return;
-        }
+        pieceBag,
+        updateScore,
+        true,
+      );
+      if (isGameOver) showGameOver();
     }
-    spawnB2BAura(gameState);
-
-    // パーティクルの状態を更新（もし main.js 側で update する設計ならここに追記、
-    // あるいは renderScene 内で自動で動いているなら不要です。環境に合わせて調整してください）
-    // if (typeof particleSystem !== 'undefined') {
-    //     particleSystem.startLoop();;
-    // }
-
-    draw(); // 内部で renderScene が呼ばれる
-    animationId = requestAnimationFrame(update);
-}
-// --- 6. スタートボタンの処理 ---
-document.getElementById('startButton').addEventListener('click', () => {
-    // 1. ホーム画面に .hidden クラスをつけてフェードアウトさせる
-    const startScreen = document.getElementById('startScreen');
-    if (startScreen) {
-        startScreen.classList.add('hidden');
+  },
+  onHardDrop: () => {
+    if (!isPaused) {
+      const isGameOver = handleHardDrop(
+        arena,
+        gameState,
+        pieceBag,
+        updateScore,
+      );
+      if (isGameOver) showGameOver();
     }
+  },
+  onHold: () => !isPaused && handleHold(arena, gameState, pieceBag),
+  onPause: () => {
+    if (!gameStarted) return;
+    isPaused = !isPaused;
+    updatePauseButton(isPaused, document.getElementById("pauseButton"));
 
-    // 2. 盤面をリセット
-    arena.forEach(row => row.fill(0));
+    if (!isPaused) {
+      startLoop();
+    }
+  },
+  onTitle: () => {
+    isPaused = true;
+    gameStarted = false;
+    updatePauseButton(isPaused, document.getElementById("pauseButton"));
+
+    const startScreen = document.getElementById("startScreen");
+    startScreen.classList.remove("hidden");
+  },
+  onReset: () => {
+    // 盤面と gameState をリセット
+    arena.forEach((row) => row.fill(0));
     gameState.score = 0;
     gameState.level = 1;
     gameState.lineCount = 0;
@@ -203,10 +153,104 @@ document.getElementById('startButton').addEventListener('click', () => {
     playerReset(arena, pieceBag, gameState);
     updateScore();
 
-    // 3. フラグを更新してゲーム開始
-    gameStarted = true;
-    isPaused = false;
-    startLoop();
+    // ポーズ中だった場合はゲームを再開
+    if (isPaused) {
+      isPaused = false;
+      updatePauseButton(false, document.getElementById("pauseButton"));
+      lastTime = performance.now();
+      startLoop();
+    }
+  },
+  onMouseMove: (dir) =>
+    !isPaused && playerMoveToMouse(arena, gameState, resetLock, true),
+  onMoveContinuous: (val) => {
+    gameState.score += val;
+    updateScore();
+  },
+  gameState: gameState,
 });
-// ゲーム開始
-playerReset(arena, pieceBag, gameState);
+
+// --- 5. 描画の実行 (司令塔の仕事) ---
+function draw() {
+  const renderData = {
+    arena,
+    player,
+    ghostPos: getGhostPosition(arena, player, collide),
+    gameState,
+    colors,
+    ROWS,
+    COLUMNS,
+    createPiece,
+    holdCanvas,
+    nextCanvases: nextCanvases.map((c) => c.canvas),
+  };
+
+  renderScene(ctxs, renderData);
+}
+
+// --- 6. メインループ ---
+
+function startLoop() {
+  if (animationId) cancelAnimationFrame(animationId); // 既存ループをキャンセル
+  lastTime = performance.now();
+  animationId = requestAnimationFrame(update);
+}
+
+function update(time = 0) {
+  if (isPaused) return;
+  const delta = time - lastTime;
+  lastTime = time;
+  dropCounter += delta;
+
+  if (dropCounter > gameState.dropInterval) {
+    const isGameOver = handlePlayerDrop(
+      arena,
+      gameState,
+      pieceBag,
+      updateScore,
+    );
+    dropCounter = 0;
+    if (isGameOver) {
+      showGameOver();
+      return;
+    }
+  }
+  spawnB2BAura(gameState);
+
+  draw();
+  animationId = requestAnimationFrame(update);
+}
+
+// --- 7. スタートボタンの処理 ---
+document.getElementById("startButton").addEventListener("click", () => {
+  // 1. ホーム画面に .hidden クラスをつけてフェードアウトさせる
+  const startScreen = document.getElementById("startScreen");
+  if (startScreen) {
+    startScreen.classList.add("hidden");
+  }
+
+  // 2. 盤面をリセット
+  arena.forEach((row) => row.fill(0));
+  gameState.score = 0;
+  gameState.level = 1;
+  gameState.lineCount = 0;
+  gameState.dropInterval = INITIAL_DROP_INTERVAL;
+  gameState.nextPieces = [];
+  gameState.holdType = null;
+  gameState.canHold = true;
+  gameState.particles = [];
+  gameState.flashMessage = null;
+  gameState.combo = 0;
+  gameState.b2b = false;
+  gameState.b2bCount = 0;
+  gameState.shake = null;
+  gameState.flashEffect = null;
+  pieceBag.length = 0;
+  playerReset(arena, pieceBag, gameState);
+  updateScore();
+
+  // 3. フラグを更新してゲーム開始
+  gameStarted = true;
+  isPaused = false;
+  startLoop();
+});

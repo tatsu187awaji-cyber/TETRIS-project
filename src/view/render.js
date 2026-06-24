@@ -42,15 +42,13 @@ export function renderScene(ctxs, data) {
 
     // ★ご褒美演出2: ライン消去のあった行を光らせるエフェクトの描画
     if (gameState.flashEffect && gameState.flashEffect.timer > 0) {
-        // 残りフレーム数に応じてだんだん薄くする（不透明度 alpha の計算）
-        const { type, timer, maxTimer, cells } = gameState.flashEffect;
-        const alpha = timer / maxTimer;
+    const { type, timer, cells } = gameState.flashEffect;
 
-        // パッと白く光らせる設定（好みに合わせて 0.8 を 1.0 にするともっと眩しくなる）
-        context.fillStyle = `rgba(255, 255, 255, ${alpha * 0.8})`;
+    // 偶数フレームだけ光らせる → パカパカ点滅
+    if (timer % 2 === 0) {
+        context.fillStyle = 'rgba(255, 255, 255, 0.8)';
 
         if (type === 'clear') {
-            // 盤面（arena）をループして、ブロックが残っている場所だけを白く塗りつぶす
             arena.forEach((row, y) => {
                 row.forEach((value, x) => {
                     if (value !== 0) {
@@ -59,15 +57,18 @@ export function renderScene(ctxs, data) {
                 });
             });
         } else if (type === 'placement' && cells) {
-            // ミノ設置時：設置したブロックだけ光らせる
+            // 設置したブロックだけ光らせるy
             cells.forEach(({ x, y }) => {
                 context.fillRect(x, y, 1, 1);
             });
         }
-
-        // 毎フレームタイマーを1ずつ減らす
-        gameState.flashEffect.timer--;
     }
+
+    gameState.flashEffect.timer--;
+    if (gameState.flashEffect.timer <= 0) {
+        gameState.flashEffect = null;
+    }
+}
     // パーティクルの更新と描画
     updateAndDrawParticles(context, gameState.particles);
     drawFlashMessage(context, gameState, COLUMNS, ROWS);
