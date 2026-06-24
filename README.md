@@ -72,6 +72,11 @@ cd TETRIS-project
 
 4. ブラウザで `http://localhost:5500/` が開けばOK
 
+### 🌐 ブラウザから直接遊ぶ
+以下のURLにアクセスするだけで遊べます（インストール不要）：
+
+https://tatsu187awaji-cyber.github.io/TETRIS-project/
+
 ---
 
 ## 🛠️ 技術スタック
