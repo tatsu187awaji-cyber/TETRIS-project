@@ -53,7 +53,6 @@ JavaScriptとCanvas APIで実装したTETRIS完全再現を目標としたテト
 
 ## 🚀 起動方法
 
-
 ### 必要なもの
 - [Visual Studio Code](https://code.visualstudio.com/)
 - VS Code拡張機能：[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
