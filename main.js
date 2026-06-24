@@ -84,6 +84,8 @@ function showGameOver() {
   context.font = `bold ${2}px 'Doto', sans-serif`;
   context.textAlign = "center";
   context.fillText("GAME OVER", COLUMNS / 2, ROWS / 2);
+  context.font = `bold ${1.0}px 'Doto', sans-serif`;
+  context.fillText("press R key", COLUMNS / 2, ROWS / 2 + 1);
 }
 
 // --- 4. コントローラー設定 ---
@@ -125,8 +127,8 @@ setupControls({
     }
   },
   onTitle: () => {
+    if (!gameStarted) return;
     isPaused = true;
-    gameStarted = false;
     updatePauseButton(isPaused, document.getElementById("pauseButton"));
 
     const startScreen = document.getElementById("startScreen");
@@ -229,6 +231,16 @@ document.getElementById("startButton").addEventListener("click", () => {
     startScreen.classList.add("hidden");
   }
 
+  // PAUSEボタンをリセット
+  document.getElementById("pauseButton").textContent = "PAUSE";
+
+  // ゲーム中断からの復帰なら盤面リセットしない
+  if (gameStarted) {
+    isPaused = false;
+    startLoop();
+    return;
+  }
+
   // 2. 盤面をリセット
   arena.forEach((row) => row.fill(0));
   gameState.score = 0;
@@ -253,4 +265,14 @@ document.getElementById("startButton").addEventListener("click", () => {
   gameStarted = true;
   isPaused = false;
   startLoop();
+});
+
+// Enterキーでスタートボタンを押せるようにする
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Enter") {
+    const startScreen = document.getElementById("startScreen");
+    if (startScreen && !startScreen.classList.contains("hidden")) {
+      document.getElementById("startButton").click();
+    }
+  }
 });

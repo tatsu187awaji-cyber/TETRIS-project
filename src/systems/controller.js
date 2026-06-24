@@ -44,6 +44,14 @@ export function setupControls({
       case "P":
         onPause();
         break;
+      case "r":
+      case "R":
+        onReset?.();
+        break;
+      case "t":
+      case "T":
+        onTitle?.();
+        break;
     }
   });
 
