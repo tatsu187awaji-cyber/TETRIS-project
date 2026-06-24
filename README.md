@@ -68,7 +68,7 @@ cd TETRIS-project
 
 3. `index.html` を右クリック →「Open with Live Server」
 
-4. ブラウザで `http://127.0.0.1:5500` が開けばOK
+4. ブラウザで `http://localhost:5500/` が開けばOK
 
 ---
 
