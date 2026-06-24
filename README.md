@@ -13,6 +13,12 @@ JavaScriptとCanvas APIで実装したTETRIS完全再現を目標としたテト
 バニラJavaScript（フレームワークなし）とCanvas APIのみを使って実装したテトリスです。
 モジュール分割による設計、本家テトリスに近いゲームルールの再現にこだわりました。
 
+### 🌐 ブラウザから直接遊ぶ
+以下のURLにアクセスするだけで遊べます（インストール不要）：
+
+https://tatsu187awaji-cyber.github.io/TETRIS-project/
+
+
 ---
 
 ## 🕹️ 操作方法
