@@ -30,6 +30,7 @@ import { spawnB2BAura } from "./src/effects/b2bEffect.js";
 
 // --- 1. 初期化 (Contexts) ---
 const { canvas, context } = initCanvas("game");
+document.getElementById("scoreBoard").style.display = "none";
 const { canvas: holdCanvas, context: holdCtx } = initCanvas("hold");
 // NEXT用のCanvasを3つ取得
 const nextCanvases = [
@@ -79,7 +80,7 @@ function saveScore(score) {
   const scores = JSON.parse(localStorage.getItem("tetrisScores") || "[]");
   scores.push({ score, date: new Date().toLocaleDateString("ja-JP") });
   scores.sort((a, b) => b.score - a.score);
-  localStorage.setItem("tetrisScores", JSON.stringify(scores.slice(0, 10)));
+  localStorage.setItem("tetrisScores", JSON.stringify(scores.slice(0, 5))); // 上位5件だけ保存
 }
 
 // --- 3. ゲームオーバー表示 ---
@@ -93,16 +94,54 @@ function showGameOver() {
 
   const scores = JSON.parse(localStorage.getItem("tetrisScores") || "[]");
   document.getElementById("scoreList").innerHTML = scores
+    .slice(0, 5)
     .map(
       (s, i) =>
-        `<li style="${i === 0 ? "color:#FFD700;font-weight:bold;" : ""}">${s.score}点　${s.date}</li>`,
+       `<li style="display:flex; justify-content:space-between; ${i === 0 ? "color:#FFD700;font-weight:bold;" : ""}">
+          <span>${i + 1},　${s.score}</span>
+          <span>${s.date}</span>
+        </li>`,
     )
     .join("");
 
   document.getElementById("scoreBoard").style.display = "block";
 }
 
-// --- 4. コントローラー設定 ---
+// --- 4. タイトル画面に戻る処理 ---
+function returnToTitleFromScoreBoard() {
+  document.getElementById("scoreBoard").style.display = "none";
+
+  // 盤面リセット
+  arena.forEach((row) => row.fill(0));
+  gameState.score = 0;
+  gameState.level = 1;
+  gameState.lineCount = 0;
+  gameState.dropInterval = INITIAL_DROP_INTERVAL;
+  gameState.nextPieces = [];
+  gameState.holdType = null;
+  gameState.canHold = true;
+  gameState.particles = [];
+  gameState.flashMessage = null;
+  gameState.combo = 0;
+  gameState.b2b = false;
+  gameState.b2bCount = 0;
+  gameState.shake = null;
+  gameState.flashEffect = null;
+  pieceBag.length = 0;
+  playerReset(arena, pieceBag, gameState);
+  updateScore();
+
+  // ループ停止・フラグ更新
+  if (animationId) cancelAnimationFrame(animationId);
+  isPaused = true;
+  gameStarted = false;
+
+  // タイトル画面へ
+  document.getElementById("startScreen").classList.remove("hidden");
+  updatePauseButton(true, document.getElementById("pauseButton"));
+}
+
+// --- 5. コントローラーのセットアップ ---
 setupControls({
   onMove: (dir) => !isPaused && playerMove(arena, dir, resetLock),
   onRotate: () => !isPaused && playerRotate(arena, resetLock),
@@ -183,10 +222,11 @@ setupControls({
     gameState.score += val;
     updateScore();
   },
+  onReturnToTitle: returnToTitleFromScoreBoard,
   gameState: gameState,
 });
 
-// --- 5. 描画の実行 (司令塔の仕事) ---
+// ---6. 描画処理 ---
 function draw() {
   const renderData = {
     arena,
@@ -204,7 +244,7 @@ function draw() {
   renderScene(ctxs, renderData);
 }
 
-// --- 6. メインループ ---
+// --- 7. メインループ ---
 
 function startLoop() {
   if (animationId) cancelAnimationFrame(animationId); // 既存ループをキャンセル
@@ -237,7 +277,7 @@ function update(time = 0) {
   animationId = requestAnimationFrame(update);
 }
 
-// --- 7. スタートボタンの処理 ---
+// --- 8. スタートボタンの処理 ---
 document.getElementById("startButton").addEventListener("click", () => {
   // 1. ホーム画面に .hidden クラスをつけてフェードアウトさせる
   const startScreen = document.getElementById("startScreen");
@@ -292,13 +332,12 @@ document.addEventListener("keydown", (e) => {
   }
 });
 
-// --- 8. リトライ・タイトルボタンの処理 ---
+// --- 9. リトライ・タイトルボタンの処理 ---
 document.getElementById("retryButton").addEventListener("click", () => {
   document.getElementById("scoreBoard").style.display = "none";
   document.getElementById("resetButton").click(); // 既存のRESET処理をそのまま使う
 });
 
 document.getElementById("titleFromScore").addEventListener("click", () => {
-  document.getElementById("scoreBoard").style.display = "none";
-  document.getElementById("titleButton").click(); // 既存のTITLE処理をそのまま使う
+  returnToTitleFromScoreBoard();
 });

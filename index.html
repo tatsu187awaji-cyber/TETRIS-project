@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <title>TETRIS</title>
     <link rel="stylesheet" href="index.css" />
-    <link rel="icon" href="img /TETRIS_icon.png" />
+    <link rel="icon" href="img/TETRIS_icon.png" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -55,59 +55,27 @@
               style="margin: 0"
             ></canvas>
 
-            <div
-              id="scoreBoard"
-              style="
-                display: none;
-                position: absolute;
-                inset: 0;
-                background: rgba(0, 0, 0, 0.88);
-                color: white;
-                overflow-y: auto;
-                font-family: &quot;DotGothic16&quot;, sans-serif;
-                text-align: center;
-                padding: 16px;
-                box-sizing: border-box;
-              "
-            >
-              <h2
-                style="
-                  margin: 12px 0 4px;
-                  font-family: &quot;Doto&quot;, sans-serif;
-                  letter-spacing: 2px;
-                "
-              >
-                GAME OVER
-              </h2>
-              <p style="margin: 4px 0">SCORE：<span id="finalScore"></span></p>
-              <hr style="border-color: #444; margin: 10px 0" />
-              <h3 style="margin: 6px 0; font-size: 14px">HIGH SCORE</h3>
-              <ol
-                id="scoreList"
-                style="
-                  text-align: left;
-                  padding-left: 28px;
-                  margin: 8px 0;
-                  font-size: 13px;
-                "
-              ></ol>
-              <div
-                style="
-                  display: flex;
-                  flex-direction: column;
-                  gap: 6px;
-                  margin-top: 12px;
-                "
-              >
-                <button class="pauseButton" id="retryButton">RETRY</button>
-                <button class="pauseButton" id="titleFromScore">TITLE</button>
+            <div id="scoreBoard" class="score-board">
+              <h2 class="score-board-title">GAME OVER</h2>
+              <p>
+                <span class="score-board-subtitle">Press "R" to retry</span>
+              </p>
+              <p class="score-font">SCORE：<span id="finalScore"></span></p>
+              <hr class="score-board-hr" />
+              <h3 class="" style="margin: 6px 0; font-size: 14px">
+                HIGH SCORE
+              </h3>
+              <ol id="scoreList" class="score-list"></ol>
+              <div class="score-board-buttons">
+                <button class="score-button" id="retryButton">RETRY</button>
+                <button class="score-button" id="titleFromScore">TITLE</button>
               </div>
             </div>
           </div>
           <div class="game-buttons">
-            <button class="pauseButton" id="titleButton">TITLE</button>
-            <button class="pauseButton" id="pauseButton">PAUSE</button>
-            <button class="pauseButton" id="resetButton">RESET</button>
+            <button class="pause-button" id="titleButton">TITLE</button>
+            <button class="pause-button" id="pauseButton">PAUSE</button>
+            <button class="pause-button" id="resetButton">RESET</button>
           </div>
         </div>
       </div>
