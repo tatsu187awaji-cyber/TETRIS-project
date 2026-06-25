@@ -74,18 +74,32 @@ let animationId = null;
 const updateScore = () => updateScoreElement(gameState);
 const resetLock = () => {};
 
+// --- スコア保存・読み込み ---
+function saveScore(score) {
+  const scores = JSON.parse(localStorage.getItem("tetrisScores") || "[]");
+  scores.push({ score, date: new Date().toLocaleDateString("ja-JP") });
+  scores.sort((a, b) => b.score - a.score);
+  localStorage.setItem("tetrisScores", JSON.stringify(scores.slice(0, 10)));
+}
+
 // --- 3. ゲームオーバー表示 ---
 function showGameOver() {
   isPaused = true;
   gameStarted = false;
-  context.fillStyle = "rgba(0, 0, 0, 0.7)";
-  context.fillRect(0, 0, canvas.width, canvas.height);
-  context.fillStyle = "#fff";
-  context.font = `bold ${2}px 'Doto', sans-serif`;
-  context.textAlign = "center";
-  context.fillText("GAME OVER", COLUMNS / 2, ROWS / 2);
-  context.font = `bold ${1.0}px 'Doto', sans-serif`;
-  context.fillText("press R key", COLUMNS / 2, ROWS / 2 + 1);
+
+  saveScore(gameState.score);
+
+  document.getElementById("finalScore").textContent = gameState.score;
+
+  const scores = JSON.parse(localStorage.getItem("tetrisScores") || "[]");
+  document.getElementById("scoreList").innerHTML = scores
+    .map(
+      (s, i) =>
+        `<li style="${i === 0 ? "color:#FFD700;font-weight:bold;" : ""}">${s.score}点　${s.date}</li>`,
+    )
+    .join("");
+
+  document.getElementById("scoreBoard").style.display = "block";
 }
 
 // --- 4. コントローラー設定 ---
@@ -231,6 +245,7 @@ document.getElementById("startButton").addEventListener("click", () => {
     startScreen.classList.add("hidden");
   }
 
+  document.getElementById("scoreBoard").style.display = "none";
   // PAUSEボタンをリセット
   document.getElementById("pauseButton").textContent = "PAUSE";
 
@@ -275,4 +290,15 @@ document.addEventListener("keydown", (e) => {
       document.getElementById("startButton").click();
     }
   }
+});
+
+// --- 8. リトライ・タイトルボタンの処理 ---
+document.getElementById("retryButton").addEventListener("click", () => {
+  document.getElementById("scoreBoard").style.display = "none";
+  document.getElementById("resetButton").click(); // 既存のRESET処理をそのまま使う
+});
+
+document.getElementById("titleFromScore").addEventListener("click", () => {
+  document.getElementById("scoreBoard").style.display = "none";
+  document.getElementById("titleButton").click(); // 既存のTITLE処理をそのまま使う
 });

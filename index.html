@@ -1,77 +1,125 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="ja">
+  <head>
+    <meta charset="UTF-8" />
+    <title>TETRIS</title>
+    <link rel="stylesheet" href="index.css" />
+    <link rel="icon" href="img /TETRIS_icon.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Doto:wght@600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8">
-  <title>TETRIS</title>
-  <link rel="stylesheet" href="index.css">
-  <link rel="icon" href="img /TETRIS_icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DotGothic16&family=Doto:wght@600&display=swap" rel="stylesheet">
-</head>
-
-
-<body>
-  <div id="startScreen" class="start-screen">
-    <div class="start-content">
-      <h1 class="start-title">TETRIS</h1>
-      <h2 class="start-subtitle">- Press Enter key -</h2>
-      <button id="startButton" class="start-button">GAME START</button>
-    </div>
-  </div>
-  <header class="header">
-    <h1>TETRIS</h1>
-  </header>
-  <div class="main-container">
-
-    <div class="left-block">
-      <div class="label hold-label">HOLD</div>
-      <canvas class="hold" width="120" height="120"></canvas>
-      <div class="hold-buttons">
-        <button id="holdButton" class="move-button">HOLD</button>
-      </div>
-      <div class="rotate-buttons">
-        <button id="moveRotate" class="move-button">↑</button>
-      </div>
-      <div class="move-buttons">
-        <button id="moveLeft" class="move-button">←</button>
-        <button id="moveRight" class="move-button">→</button>
-      </div>
-      <div class="down-buttons">
-        <button id="moveDown" class="move-button">↓</button>
+  <body>
+    <div id="startScreen" class="start-screen">
+      <div class="start-content">
+        <h1 class="start-title">TETRIS</h1>
+        <h2 class="start-subtitle">- Press Enter key -</h2>
+        <button id="startButton" class="start-button">GAME START</button>
       </div>
     </div>
-
-    <div class="center-block">
-      <div class="main-display">
-        <div class="score-display">
-          SCORE：<span id="score">0</span>
+    <header class="header">
+      <h1>TETRIS</h1>
+    </header>
+    <div class="main-container">
+      <div class="left-block">
+        <div class="label hold-label">HOLD</div>
+        <canvas class="hold" width="120" height="120"></canvas>
+        <div class="hold-buttons">
+          <button id="holdButton" class="move-button">HOLD</button>
         </div>
-        <div class="game-display">
-          <canvas class="tetris" id="game" width="240" height="400" style="margin: 0;"></canvas>
+        <div class="rotate-buttons">
+          <button id="moveRotate" class="move-button">↑</button>
         </div>
-        <div class="game-buttons">
-          <button class="pauseButton" id="titleButton">TITLE</button>
-          <button class="pauseButton" id="pauseButton">PAUSE</button>
-          <button class="pauseButton" id="resetButton">RESET</button>
+        <div class="move-buttons">
+          <button id="moveLeft" class="move-button">←</button>
+          <button id="moveRight" class="move-button">→</button>
+        </div>
+        <div class="down-buttons">
+          <button id="moveDown" class="move-button">↓</button>
         </div>
       </div>
 
-    </div>
+      <div class="center-block">
+        <div class="main-display">
+          <div class="score-display">SCORE：<span id="score">0</span></div>
+          <div class="game-display" style="position: relative">
+            <canvas
+              class="tetris"
+              id="game"
+              width="240"
+              height="400"
+              style="margin: 0"
+            ></canvas>
 
-    <div class="right-block">
-      <div class="label-level">
-        LEVEL<span id="level">1</span>
+            <div
+              id="scoreBoard"
+              style="
+                display: none;
+                position: absolute;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.88);
+                color: white;
+                overflow-y: auto;
+                font-family: &quot;DotGothic16&quot;, sans-serif;
+                text-align: center;
+                padding: 16px;
+                box-sizing: border-box;
+              "
+            >
+              <h2
+                style="
+                  margin: 12px 0 4px;
+                  font-family: &quot;Doto&quot;, sans-serif;
+                  letter-spacing: 2px;
+                "
+              >
+                GAME OVER
+              </h2>
+              <p style="margin: 4px 0">SCORE：<span id="finalScore"></span></p>
+              <hr style="border-color: #444; margin: 10px 0" />
+              <h3 style="margin: 6px 0; font-size: 14px">HIGH SCORE</h3>
+              <ol
+                id="scoreList"
+                style="
+                  text-align: left;
+                  padding-left: 28px;
+                  margin: 8px 0;
+                  font-size: 13px;
+                "
+              ></ol>
+              <div
+                style="
+                  display: flex;
+                  flex-direction: column;
+                  gap: 6px;
+                  margin-top: 12px;
+                "
+              >
+                <button class="pauseButton" id="retryButton">RETRY</button>
+                <button class="pauseButton" id="titleFromScore">TITLE</button>
+              </div>
+            </div>
+          </div>
+          <div class="game-buttons">
+            <button class="pauseButton" id="titleButton">TITLE</button>
+            <button class="pauseButton" id="pauseButton">PAUSE</button>
+            <button class="pauseButton" id="resetButton">RESET</button>
+          </div>
+        </div>
       </div>
-      <div class="label next-label">NEXT</div>
-      <canvas class="next next-3" width="120" height="120"></canvas>
-      <canvas class="next next-2" width="120" height="120"></canvas>
-      <canvas class="next next-1" width="120" height="120"></canvas>
 
+      <div class="right-block">
+        <div class="label-level">LEVEL<span id="level">1</span></div>
+        <div class="label next-label">NEXT</div>
+        <canvas class="next next-3" width="120" height="120"></canvas>
+        <canvas class="next next-2" width="120" height="120"></canvas>
+        <canvas class="next next-1" width="120" height="120"></canvas>
+      </div>
     </div>
-  </div>
-  <script type="module" src="main.js"></script>
-</body>
-
+    <script type="module" src="main.js"></script>
+  </body>
 </html>
