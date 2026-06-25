@@ -12,6 +12,7 @@ export function setupControls({
   onReset,
   onMoveContinuous,
   onMouseMove,
+  onReturnToTitle,
   gameState,
 }) {
   // --- 1. キーボード操作 ---
@@ -46,11 +47,19 @@ export function setupControls({
         break;
       case "r":
       case "R":
-        onReset?.();
+        if (document.getElementById("scoreBoard").style.display === "block") {
+          document.getElementById("retryButton").click();
+        } else {
+          onReset?.();
+        }
         break;
       case "t":
       case "T":
-        onTitle?.();
+        if (document.getElementById("scoreBoard").style.display === "block") {
+          onReturnToTitle?.();
+        } else {
+          onTitle?.();
+        }
         break;
     }
   });
