@@ -73,6 +73,108 @@
   /* クリックした瞬間に少し凹む */
 }
 
+.score-board {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  color: white;
+  overflow-y: auto;
+  font-family: "DotGothic16", sans-serif;
+  text-align: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.score-board-title {
+  font-family: 'Doto', sans-serif;
+  font-size: 2rem;
+  color: #00eeff;
+  text-shadow: 0 0 10px rgba(0, 238, 255, 0.5);
+  margin-top: 1px;
+  margin-bottom: -1rem;
+}
+
+.score-board-subtitle {
+  font-family: 'DotGothic16', sans-serif;
+  font-size: 1rem;
+  color: #ffaa00;
+  margin-bottom: 1.5rem;
+}
+
+.score-font {
+  font-family: 'Doto', sans-serif;
+  font-size: 1.2rem;
+  color: #fff;
+  margin-top: -1rem;
+  margin-bottom: 0;
+}
+
+.score-board-hr {
+  border-color: #444;
+  margin: 10px 0;
+}
+
+.score-list {
+  text-align: left;
+  padding-left: 28px;
+  margin: 8px 0;
+  font-size: 13px;
+}
+
+.score-board-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}
+
+
+.score-button {
+  /* 既存のスタイル... */
+  color: white;
+  background-color: transparent;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: 'Doto', sans-serif;
+  margin-top: 20px;
+
+  /* ✅ ここからピクセル風ボーダーの追加 */
+  border: none;
+  /* デフォルトのボーダーを非表示にする */
+  box-shadow:
+    inset -2px -2px #ffffff,
+    /* 左下から光が当たったような内側の影 */
+    inset 2px 2px #5a5a5a,
+    /* 右上から影ができたような内側の影 */
+    -2px -2px #000000,
+    /* 左上に描画する外側の影 */
+    2px 2px #000000,
+    /* 右下に描画する外側の影 */
+    -2px 2px #000000,
+    /* 左下に描画する外側の影 */
+    2px -2px #000000;
+  /* 右上に描画する外側の影 */
+
+  transition: all 0.1s ease-in-out;
+  /* ホバー時の滑らかなアニメーション */
+}
+
+/* ボタンが押されたときのスタイルを追加 */
+.score-button:active {
+  box-shadow: none;
+  /* 影をなくしてボタンが凹んでいるように見せる */
+  transform: translateY(2px) translateX(2px);
+  /* わずかにずらして押し込まれた感を出す */
+}
+
+/* ホバー時のスタイル（オプション） */
+.score-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+
 body {
   /* Flexboxでコンテンツを中央寄せ */
   display: flex;
@@ -105,7 +207,8 @@ body {
 /* 個別の要素にも適用 */
 .score-display,
 .label,
-.pauseButton {
+.pause-button,
+.score-button {
   font-family: 'Doto', sans-serif;
 }
 
@@ -176,6 +279,7 @@ canvas {
   /* 垂直方向の中央揃え */
   margin-bottom: 1rem;
 }
+
 /* スコア表示のスタイル */
 .score-display {
   text-align: center;
@@ -233,7 +337,7 @@ canvas {
   width: 280px;
 }
 
-.pauseButton {
+.pause-button {
   /* 既存のスタイル... */
   color: white;
   background-color: transparent;
@@ -265,7 +369,7 @@ canvas {
 }
 
 /* ボタンが押されたときのスタイルを追加 */
-.pauseButton:active {
+.pause-button:active {
   box-shadow: none;
   /* 影をなくしてボタンが凹んでいるように見せる */
   transform: translateY(2px) translateX(2px);
@@ -273,7 +377,7 @@ canvas {
 }
 
 /* ホバー時のスタイル（オプション） */
-.pauseButton:hover {
+.pause-button:hover {
   background-color: rgba(0, 0, 0, 0.1);
 }
 
