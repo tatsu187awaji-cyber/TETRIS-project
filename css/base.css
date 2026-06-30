@@ -1,0 +1,26 @@
+body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  margin: 0;
+  background-color: #333;
+  font-family: 'Doto', "DotGothic16", sans-serif;
+  font-weight: 600;
+}
+
+.header h1 {
+  text-align: center;
+  color: white;
+  font-family: 'Doto', sans-serif;
+  font-size: 2.5rem;
+  margin-bottom: 20px;
+}
+
+.score-display,
+.label,
+.pause-button,
+.score-button {
+  font-family: 'Doto', sans-serif;
+}
