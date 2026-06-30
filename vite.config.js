@@ -4,9 +4,10 @@ import path from "path";
 import { fileURLToPath } from "url";
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const isDev = process.argv.includes("dev");
 
-export default defineConfig(({ command }) => ({
-  base: command === "build" ? "/TETRIS-project/" : "/",
+export default defineConfig({
+  base: isDev ? "/" : "/TETRIS-project/",
   plugins: [
     createHtmlPlugin({
       inject: {
@@ -16,4 +17,4 @@ export default defineConfig(({ command }) => ({
       },
     }),
   ],
-}));
+});
