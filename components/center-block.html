@@ -1,0 +1,36 @@
+<div class="center-block">
+  <div class="main-display">
+    <div class="score-display">SCORE：<span id="score">0</span></div>
+    <div class="game-display" style="position: relative">
+      <canvas
+        class="tetris"
+        id="game"
+        width="240"
+        height="400"
+        style="margin: 0"
+      ></canvas>
+
+      <div id="scoreBoard" class="score-board">
+        <h2 class="score-board-title">GAME OVER</h2>
+        <p>
+          <span class="score-board-subtitle">Press "R" to retry</span>
+        </p>
+        <p class="score-font">SCORE：<span id="finalScore"></span></p>
+        <hr class="score-board-hr" />
+        <h3 class="" style="margin: 6px 0; font-size: 14px">
+          HIGH SCORE
+        </h3>
+        <ol id="scoreList" class="score-list"></ol>
+        <div class="score-board-buttons">
+          <button class="score-button" id="retryButton">RETRY</button>
+          <button class="score-button" id="titleFromScore">TITLE</button>
+        </div>
+      </div>
+    </div>
+    <div class="game-buttons">
+      <button class="pause-button" id="titleButton">TITLE</button>
+      <button class="pause-button" id="pauseButton">PAUSE</button>
+      <button class="pause-button" id="resetButton">RESET</button>
+    </div>
+  </div>
+</div>

@@ -6,8 +6,8 @@
 export function triggerFlash(gameState) {
     gameState.flashEffect = {
         type: 'clear',  // ← 種類を追加
-        timer: 8,
-        maxTimer: 8
+        timer: 18,      // 点滅回数×2フレーム分
+        maxTimer: 18
     };
 }
 
