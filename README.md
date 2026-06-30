@@ -62,8 +62,7 @@ https://tatsu187awaji-cyber.github.io/TETRIS-project/
 ## 🚀 起動方法
 
 ### 必要なもの
-- [Visual Studio Code](https://code.visualstudio.com/)
-- VS Code拡張機能：[Live Server](https://marketplace.visualstudio.com/items?itemName=ritwickdey.LiveServer)
+- [Node.js](https://nodejs.org/)（npm含む）
 
 ### 手順
 1. リポジトリをクローン
@@ -72,11 +71,17 @@ git clone git@github.com:tatsu187awaji-cyber/TETRIS-project.git
 cd TETRIS-project
 ```
 
-2. VS CodeでフォルダをOpen
+2. 依存パッケージをインストール
+```bash
+npm install
+```
 
-3. `index.html` を右クリック →「Open with Live Server」
+3. 開発サーバーを起動
+```bash
+npm run dev
+```
 
-4. ブラウザで `http://localhost:5500/` が開けばOK
+4. ブラウザで `http://127.0.0.1:5173/`（または表示されたURL）が開けばOK
 
 ### 🌐 ブラウザから直接遊ぶ
 以下のURLにアクセスするだけで遊べます（インストール不要）：
@@ -92,7 +97,8 @@ https://tatsu187awaji-cyber.github.io/TETRIS-project/
 | HTML5 Canvas | ゲーム画面の描画 |
 | Vanilla JavaScript (ES Modules) | ゲームロジック全般 |
 | CSS3 | UI・アニメーション |
-
+| Vite | 開発サーバー・ビルドツール |
+| vite-plugin-html (EJS) | HTMLコンポーネント分割・結合 |
 ---
 
 ## 📁 ディレクトリ構成
@@ -100,28 +106,42 @@ https://tatsu187awaji-cyber.github.io/TETRIS-project/
 ```
 TETRIS-project/
 ├── index.html
-├── index.css
-├── main.js               # エントリーポイント・メインループ
+├── vite.config.js
+├── package.json
+├── components/            # HTML分割パーツ（EJSで結合）
+│   ├── start-screen.html
+│   ├── header.html
+│   ├── left-block.html
+│   ├── center-block.html
+│   └── right-block.html
+├── css/
+│   ├── base.css           # body・フォント共通設定
+│   ├── layout.css         # メインコンテナ・各ブロック配置
+│   ├── start-screen.css   # スタート画面
+│   ├── score-board.css    # ゲームオーバー画面
+│   ├── game.css           # canvas・スコア表示・ラベル
+│   └── buttons.css        # 各種ボタン
+├── index.css              # 上記cssファイルをまとめてimport
+├── main.js                # エントリーポイント・メインループ
 └── src/
     ├── core/
-    │   ├── constants.js  # 定数・ミノ定義
-    │   ├── logic.js      # 衝突判定・Tスピン判定
-    │   ├── engine.js     # ゴースト計算・ライン消去・レベルアップ
-    │   └── kickTables.js # SRSキックテーブル
+    │   ├── constants.js   # 定数・ミノ定義
+    │   ├── logic.js       # 衝突判定・Tスピン判定
+    │   ├── engine.js      # ゴースト計算・ライン消去・レベルアップ
+    │   └── kickTables.js  # SRSキックテーブル
     ├── entities/
-    │   └── player.js     # プレイヤー操作・スポーン
+    │   └── player.js      # プレイヤー操作・スポーン
     ├── systems/
-    │   ├── actions.js    # ドロップ・ホールド・スコア計算
-    │   └── controller.js # キーボード・マウス入力
+    │   ├── actions.js     # ドロップ・ホールド・スコア計算
+    │   └── controller.js  # キーボード・マウス入力
     ├── view/
-    │   ├── render.js     # 描画処理
-    │   └── ui.js         # UI更新
+    │   ├── render.js      # 描画処理
+    │   └── ui.js          # UI更新
     └── effects/
-        ├── b2bEffect.js      # B2Bオーラエフェクト
-        ├── flashEffect.js    # フラッシュエフェクト
-        └── shakeEffect.js    # シェイクエフェクト
+        ├── b2bEffect.js       # B2Bオーラエフェクト
+        ├── flashEffect.js     # フラッシュエフェクト
+        └── shakeEffect.js     # シェイクエフェクト
 ```
-
 ---
 
 ## 💡 実装のこだわり
