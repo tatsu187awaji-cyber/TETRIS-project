@@ -1,0 +1,55 @@
+.score-board {
+  display: none;
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.88);
+  color: white;
+  overflow-y: auto;
+  font-family: "DotGothic16", sans-serif;
+  text-align: center;
+  padding: 16px;
+  box-sizing: border-box;
+}
+
+.score-board-title {
+  font-family: 'Doto', sans-serif;
+  font-size: 2rem;
+  color: #00eeff;
+  text-shadow: 0 0 10px rgba(0, 238, 255, 0.5);
+  margin-top: 1px;
+  margin-bottom: -1rem;
+}
+
+.score-board-subtitle {
+  font-family: 'DotGothic16', sans-serif;
+  font-size: 1rem;
+  color: #ffaa00;
+  margin-bottom: 1.5rem;
+}
+
+.score-font {
+  font-family: 'Doto', sans-serif;
+  font-size: 1.2rem;
+  color: #fff;
+  margin-top: -1rem;
+  margin-bottom: 0;
+}
+
+.score-board-hr {
+  border-color: #444;
+  margin: 10px 0;
+}
+
+.score-list {
+  text-align: left;
+  padding-left: 28px;
+  margin: 8px 0;
+  font-size: 13px;
+}
+
+.score-board-buttons {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-top: 12px;
+}

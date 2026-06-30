@@ -1,0 +1,20 @@
+.main-container {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 40px;
+}
+
+.left-block,
+.center-block,
+.right-block {
+  padding: 10px;
+}
+
+.left-block {
+  margin-top: 20%;
+}
+
+.right-block {
+  margin-top: 5%;
+}
