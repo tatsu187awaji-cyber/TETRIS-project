@@ -1,0 +1,17 @@
+{
+  "name": "tetris-project",
+  "version": "1.0.0",
+  "description": "JavaScriptとCanvas APIで実装したTETRIS完全再現を目標としたテトリスゲームです。",
+  "main": "main.js",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview" 
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "vite": "^8.1.0"
+  }
+}
