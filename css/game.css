@@ -1,0 +1,77 @@
+canvas {
+  background: #111;
+  display: block;
+  margin: 1rem auto;
+  border: 1px solid black;
+}
+
+.hold {
+  position: static;
+  left: 50%;
+  top: 153px;
+  margin: 0;
+}
+
+.next {
+  left: 50%;
+  top: 153px;
+  margin: 0;
+}
+
+.tetris {
+  margin: 1rem auto;
+}
+
+.game-display {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.score-display {
+  text-align: center;
+  color: white;
+  font-family: 'Doto', sans-serif;
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+}
+
+.label {
+  position: absolute;
+  color: white;
+  font-family: 'Doto', sans-serif;
+  font-size: 1rem;
+  text-align: center;
+  width: 120px;
+}
+
+.hold-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 20px;
+}
+
+.hold-label {
+  margin-bottom: 8px;
+}
+
+.label-level {
+  color: white;
+  font-weight: 600;
+  font-family: "Doto", sans-serif;
+}
+
+.label-level span {
+  margin-left: 5px;
+  font-size: 24px;
+}
+
+.game-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 10px;
+  width: 280px;
+}

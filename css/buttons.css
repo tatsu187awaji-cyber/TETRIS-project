@@ -1,0 +1,122 @@
+.score-button {
+  color: white;
+  background-color: transparent;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: 'Doto', sans-serif;
+  margin-top: 20px;
+  border: none;
+  box-shadow:
+    inset -2px -2px #ffffff,
+    inset 2px 2px #5a5a5a,
+    -2px -2px #000000,
+    2px 2px #000000,
+    -2px 2px #000000,
+    2px -2px #000000;
+  transition: all 0.1s ease-in-out;
+}
+
+.score-button:active {
+  box-shadow: none;
+  transform: translateY(2px) translateX(2px);
+}
+
+.score-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.pause-button {
+  color: white;
+  background-color: transparent;
+  padding: 8px 16px;
+  font-size: 16px;
+  cursor: pointer;
+  font-family: 'Doto', sans-serif;
+  margin-top: 20px;
+  border: none;
+  box-shadow:
+    inset -2px -2px #ffffff,
+    inset 2px 2px #5a5a5a,
+    -2px -2px #000000,
+    2px 2px #000000,
+    -2px 2px #000000,
+    2px -2px #000000;
+  transition: all 0.1s ease-in-out;
+}
+
+.pause-button:active {
+  box-shadow: none;
+  transform: translateY(2px) translateX(2px);
+}
+
+.pause-button:hover {
+  background-color: rgba(0, 0, 0, 0.1);
+}
+
+.hold-buttons {
+  width: 56px;
+  display: flex;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.move-buttons {
+  bottom: 10px;
+  display: flex;
+  margin-left: 10px;
+  margin-top: 10px;
+  gap: 20px;
+}
+
+.rotate-buttons {
+  bottom: 10px;
+  display: flex;
+  width: 40px;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.down-buttons {
+  bottom: 10px;
+  display: flex;
+  width: 40px;
+  margin: 0 auto;
+  margin-top: 10px;
+}
+
+.move-button {
+  font-size: 16px;
+  padding: 10px 10px;
+  background-color: transparent;
+  border: none;
+  box-shadow:
+    inset -2px -2px #ffffff,
+    inset 2px 2px #5a5a5a,
+    -2px -2px #000000,
+    2px 2px #000000,
+    -2px 2px #000000,
+    2px -2px #000000;
+  transition: all 0.1s ease-in-out;
+  color: white;
+  cursor: pointer;
+  font-family: "DotGothic16", sans-serif;
+}
+
+.move-button:active {
+  box-shadow: none;
+  transform: translateY(2px) translateX(2px);
+}
+
+.move-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+.hold-buttons .move-button {
+  font-family: Doto, sans-serif;
+}
+
+#rotateButton,
+#downButton {
+  margin: 0 auto;
+}
